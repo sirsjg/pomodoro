@@ -1,0 +1,26 @@
+{
+  "name": "pomodoro-timer-app",
+  "version": "1.0.0",
+  "description": "A beautiful Pomodoro timer for macOS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --mac"
+  },
+  "devDependencies": {
+    "electron": "^latest",
+    "electron-builder": "^latest"
+  },
+  "build": {
+    "appId": "com.yourname.pomodoro-timer",
+    "productName": "Pomodoro Timer",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "icon.icns"
+    }
+  }
+}
