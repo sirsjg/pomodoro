@@ -4,6 +4,13 @@ const path = require('path');
 let mainWindow;
 
 function createWindow() {
+  let iconPath;
+  if (process.platform === 'darwin') {
+    iconPath = path.join(__dirname, 'icon.icns');
+  } else {
+    iconPath = path.join(__dirname, 'icon.png');
+  }
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -14,8 +21,8 @@ function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
-    icon: path.join(__dirname, 'icon.png'), // Optional: add an icon
-    titleBarStyle: 'hiddenInset', // macOS style title bar
+    icon: iconPath,
+    titleBarStyle: 'hiddenInset',
     backgroundColor: '#0a0a0a'
   });
 

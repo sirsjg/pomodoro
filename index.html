@@ -253,6 +253,17 @@
             timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
+        function updatePresetButtonText() {
+            presetButtons.forEach(button => {
+                const minutes = button.dataset.minutes;
+                if (isRunning) {
+                    button.textContent = `+${minutes} mins`;
+                } else {
+                    button.textContent = `${minutes} mins`;
+                }
+            });
+        }
+
         function startTimer(minutes) {
             initAudio();
             selectedMinutes = minutes;
@@ -270,8 +281,8 @@
                 </svg>
             `;
             
-            // Disable preset buttons while running
-            presetButtons.forEach(btn => btn.disabled = true);
+            // Update preset button text to show "+"
+            updatePresetButtonText();
             
             updateDisplay();
             
@@ -286,6 +297,13 @@
                     }
                 }
             }, 1000);
+        }
+
+        function addTime(minutes) {
+            if (isRunning) {
+                timeLeft += minutes * 60;
+                updateDisplay();
+            }
         }
 
         function pauseTimer() {
@@ -326,8 +344,8 @@
                 </svg>
             `;
             
-            // Re-enable preset buttons
-            presetButtons.forEach(btn => btn.disabled = false);
+            // Update preset button text to remove "+"
+            updatePresetButtonText();
         }
 
         function timerComplete() {
@@ -336,8 +354,8 @@
             modal.style.display = 'flex';
             startChiming();
             
-            // Re-enable preset buttons
-            presetButtons.forEach(btn => btn.disabled = false);
+            // Update preset button text to remove "+"
+            updatePresetButtonText();
             pauseBtn.disabled = true;
             resetBtn.disabled = true;
 
@@ -350,7 +368,11 @@
         presetButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const minutes = parseInt(button.dataset.minutes);
-                startTimer(minutes);
+                if (isRunning) {
+                    addTime(minutes);
+                } else {
+                    startTimer(minutes);
+                }
             });
         });
 
