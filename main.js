@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, Notification } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -10,8 +10,9 @@ function createWindow() {
     minWidth: 600,
     minHeight: 400,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     },
     icon: path.join(__dirname, 'icon.png'), // Optional: add an icon
     titleBarStyle: 'hiddenInset', // macOS style title bar
@@ -77,4 +78,8 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();
+});
+
+ipcMain.handle('show-notification', (event, title, body) => {
+  new Notification({ title, body, icon: path.join(__dirname, 'icon.png') }).show();
 });

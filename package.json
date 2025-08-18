@@ -9,8 +9,8 @@
     "dist": "electron-builder --mac"
   },
   "devDependencies": {
-    "electron": "^latest",
-    "electron-builder": "^latest"
+    "electron": "latest",
+    "electron-builder": "^26.0.12"
   },
   "build": {
     "appId": "com.yourname.pomodoro-timer",

@@ -47,6 +47,13 @@
             margin-bottom: 2rem;
         }
 
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
         .preset-btn, .control-btn {
             padding: 1rem 2rem;
             font-size: 1.2rem;
@@ -77,6 +84,21 @@
         .control-btn:disabled:hover {
             transform: none;
             box-shadow: none;
+        }
+
+        .icon-btn {
+            width: 60px;
+            height: 60px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .icon-btn svg {
+            width: 28px;
+            height: 28px;
         }
 
         .modal {
@@ -148,8 +170,18 @@
         </div>
         
         <div class="controls">
-            <button class="control-btn" id="pauseBtn" disabled>Pause</button>
-            <button class="control-btn" id="resetBtn" disabled>Reset</button>
+            <button class="control-btn icon-btn" id="pauseBtn" disabled title="Pause">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            </button>
+            <button class="control-btn icon-btn" id="resetBtn" disabled title="Reset">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -231,7 +263,12 @@
             timerDisplay.classList.add('running');
             pauseBtn.disabled = false;
             resetBtn.disabled = false;
-            pauseBtn.textContent = 'Pause';
+            pauseBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            `;
             
             // Disable preset buttons while running
             presetButtons.forEach(btn => btn.disabled = true);
@@ -254,11 +291,20 @@
         function pauseTimer() {
             if (isPaused) {
                 isPaused = false;
-                pauseBtn.textContent = 'Pause';
+                pauseBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            `;
                 timerDisplay.classList.add('running');
             } else {
                 isPaused = true;
-                pauseBtn.textContent = 'Resume';
+                pauseBtn.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                `;
                 timerDisplay.classList.remove('running');
             }
         }
@@ -273,7 +319,12 @@
             timerDisplay.classList.remove('running');
             pauseBtn.disabled = true;
             resetBtn.disabled = true;
-            pauseBtn.textContent = 'Pause';
+            pauseBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            `;
             
             // Re-enable preset buttons
             presetButtons.forEach(btn => btn.disabled = false);
@@ -290,11 +341,8 @@
             pauseBtn.disabled = true;
             resetBtn.disabled = true;
 
-            if (Notification.permission === "granted") {
-                new Notification("Time's Up!", {
-                    body: "Your Pomodoro session is complete!",
-                    icon: 'icon.png'
-                });
+            if (window.electronAPI) {
+                window.electronAPI.showNotification("Time's Up!", "Your Pomodoro session is complete!");
             }
         }
 
@@ -317,9 +365,6 @@
 
         // Initialize display
         updateDisplay();
-
-        // Request notification permission
-        Notification.requestPermission();
 
     </script>
 </body>
