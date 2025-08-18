@@ -17,46 +17,161 @@
             color: #ffffff;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .timers-grid {
+            display: grid;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Dynamic grid layouts based on timer count */
+        .timers-grid[data-count="1"] {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .timers-grid[data-count="2"] {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+        }
+
+        .timers-grid[data-count="3"] {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .timers-grid[data-count="3"] .timer-container:nth-child(3) {
+            grid-column: 1 / -1;
+        }
+
+        .timers-grid[data-count="4"] {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .timers-grid[data-count="5"] {
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .timers-grid[data-count="5"] .timer-container:nth-child(4),
+        .timers-grid[data-count="5"] .timer-container:nth-child(5) {
+            grid-column: span 1;
+        }
+
+        .timers-grid[data-count="6"] {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
         }
 
         .timer-container {
             text-align: center;
-            width: 100%;
-            max-width: 800px;
             padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timer-container:last-child {
+            border-right: none;
+        }
+
+        /* Remove right border for last item in each row */
+        .timers-grid[data-count="2"] .timer-container:nth-child(2),
+        .timers-grid[data-count="3"] .timer-container:nth-child(2),
+        .timers-grid[data-count="4"] .timer-container:nth-child(2n),
+        .timers-grid[data-count="5"] .timer-container:nth-child(3),
+        .timers-grid[data-count="6"] .timer-container:nth-child(2n) {
+            border-right: none;
+        }
+
+        /* Remove bottom border for last row */
+        .timers-grid[data-count="1"] .timer-container,
+        .timers-grid[data-count="2"] .timer-container,
+        .timers-grid[data-count="3"] .timer-container:last-child,
+        .timers-grid[data-count="4"] .timer-container:nth-last-child(-n+2),
+        .timers-grid[data-count="5"] .timer-container:nth-last-child(-n+3),
+        .timers-grid[data-count="6"] .timer-container:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .delete-timer {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 67, 54, 0.2);
+            border: 1px solid rgba(255, 67, 54, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .delete-timer:hover {
+            opacity: 1;
+            background-color: rgba(255, 67, 54, 0.4);
+            transform: scale(1.1);
+        }
+
+        .delete-timer svg {
+            width: 16px;
+            height: 16px;
+            stroke: #ff4336;
         }
 
         .timer-display {
-            font-size: clamp(6rem, 20vw, 12rem);
+            font-size: clamp(4rem, 12vw, 8rem);
             font-weight: 200;
             letter-spacing: 0.05em;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
             font-variant-numeric: tabular-nums;
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
         }
 
+        /* Adjust font sizes based on timer count */
+        .timers-grid[data-count="2"] .timer-display,
+        .timers-grid[data-count="3"] .timer-display,
+        .timers-grid[data-count="4"] .timer-display {
+            font-size: clamp(3rem, 8vw, 6rem);
+        }
+
+        .timers-grid[data-count="5"] .timer-display,
+        .timers-grid[data-count="6"] .timer-display {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+        }
+
         .preset-buttons {
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .controls {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             justify-content: center;
             align-items: center;
         }
 
         .preset-btn, .control-btn {
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
             background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
@@ -72,10 +187,6 @@
             box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
         }
 
-        .control-btn {
-            margin: 0 0.5rem;
-        }
-
         .control-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -87,8 +198,8 @@
         }
 
         .icon-btn {
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             padding: 0;
             display: flex;
             align-items: center;
@@ -97,8 +208,37 @@
         }
 
         .icon-btn svg {
-            width: 28px;
-            height: 28px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .add-timer-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .add-timer-btn:hover {
+            background-color: rgba(76, 175, 80, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .add-timer-btn svg {
+            width: 30px;
+            height: 30px;
+            stroke: #4CAF50;
         }
 
         .modal {
@@ -154,36 +294,18 @@
             50% { opacity: 0.7; }
         }
 
-        .controls {
-            margin-top: 2rem;
-        }
     </style>
 </head>
 <body>
-    <div class="timer-container">
-        <div class="timer-display" id="timer">00:00</div>
-        
-        <div class="preset-buttons" id="presets">
-            <button class="preset-btn" data-minutes="5">5 mins</button>
-            <button class="preset-btn" data-minutes="15">15 mins</button>
-            <button class="preset-btn" data-minutes="30">30 mins</button>
-        </div>
-        
-        <div class="controls">
-            <button class="control-btn icon-btn" id="pauseBtn" disabled title="Pause">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-            </button>
-            <button class="control-btn icon-btn" id="resetBtn" disabled title="Reset">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="1 4 1 10 7 10"></polyline>
-                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-                </svg>
-            </button>
-        </div>
+    <div class="timers-grid" id="timersGrid">
     </div>
+
+    <button class="add-timer-btn" id="addTimerBtn" title="Add Timer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+    </button>
 
     <div class="modal" id="modal">
         <div class="modal-content">
@@ -193,201 +315,357 @@
     </div>
 
     <script>
-        let timeLeft = 0;
-        let timerInterval = null;
-        let audioContext = null;
-        let isRunning = false;
-        let isPaused = false;
-        let selectedMinutes = 0;
-
-        const timerDisplay = document.getElementById('timer');
-        const modal = document.getElementById('modal');
-        const okBtn = document.getElementById('okBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const presetButtons = document.querySelectorAll('.preset-btn');
-
-        // Initialize audio context on first user interaction
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        class PomodoroTimer {
+            constructor(id) {
+                this.id = id;
+                this.timeLeft = 0;
+                this.timerInterval = null;
+                this.audioContext = null;
+                this.isRunning = false;
+                this.isPaused = false;
+                this.selectedMinutes = 0;
+                this.chimeInterval = null;
+                this.element = null;
             }
-        }
 
-        function playChime() {
-            if (!audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.5);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
-
-        let chimeInterval = null;
-
-        function startChiming() {
-            playChime();
-            chimeInterval = setInterval(playChime, 1000);
-        }
-
-        function stopChiming() {
-            if (chimeInterval) {
-                clearInterval(chimeInterval);
-                chimeInterval = null;
+            createElement() {
+                const container = document.createElement('div');
+                container.className = 'timer-container';
+                container.id = `timer-${this.id}`;
+                
+                container.innerHTML = `
+                    ${timers.size > 1 ? `
+                    <button class="delete-timer" data-timer-id="${this.id}" title="Delete Timer">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    ` : ''}
+                    <div class="timer-display" id="display-${this.id}">00:00</div>
+                    
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-timer-id="${this.id}" data-minutes="5">5 mins</button>
+                        <button class="preset-btn" data-timer-id="${this.id}" data-minutes="15">15 mins</button>
+                        <button class="preset-btn" data-timer-id="${this.id}" data-minutes="30">30 mins</button>
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="control-btn icon-btn" id="pauseBtn-${this.id}" data-timer-id="${this.id}" disabled title="Pause">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                        </button>
+                        <button class="control-btn icon-btn" id="resetBtn-${this.id}" data-timer-id="${this.id}" disabled title="Reset">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                this.element = container;
+                this.setupEventListeners();
+                return container;
             }
-        }
 
-        function updateDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
+            setupEventListeners() {
+                // Preset button listeners
+                const presetBtns = this.element.querySelectorAll('.preset-btn');
+                presetBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const minutes = parseInt(btn.dataset.minutes);
+                        if (this.isRunning) {
+                            this.addTime(minutes);
+                        } else {
+                            this.startTimer(minutes);
+                        }
+                    });
+                });
 
-        function updatePresetButtonText() {
-            presetButtons.forEach(button => {
-                const minutes = button.dataset.minutes;
-                if (isRunning) {
-                    button.textContent = `+${minutes} mins`;
+                // Pause button
+                const pauseBtn = this.element.querySelector(`#pauseBtn-${this.id}`);
+                pauseBtn.addEventListener('click', () => this.pauseTimer());
+
+                // Reset button
+                const resetBtn = this.element.querySelector(`#resetBtn-${this.id}`);
+                resetBtn.addEventListener('click', () => this.resetTimer());
+
+                // Delete button
+                const deleteBtn = this.element.querySelector('.delete-timer');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => this.delete());
+                }
+            }
+
+            initAudio() {
+                if (!this.audioContext) {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playChime() {
+                if (!this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, this.audioContext.currentTime + 0.5);
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.5);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.5);
+            }
+
+            startChiming() {
+                this.playChime();
+                this.chimeInterval = setInterval(() => this.playChime(), 1000);
+            }
+
+            stopChiming() {
+                if (this.chimeInterval) {
+                    clearInterval(this.chimeInterval);
+                    this.chimeInterval = null;
+                }
+            }
+
+            updateDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                const display = this.element.querySelector(`#display-${this.id}`);
+                display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            updatePresetButtonText() {
+                const presetButtons = this.element.querySelectorAll('.preset-btn');
+                presetButtons.forEach(button => {
+                    const minutes = button.dataset.minutes;
+                    if (this.isRunning) {
+                        button.textContent = `+${minutes} mins`;
+                    } else {
+                        button.textContent = `${minutes} mins`;
+                    }
+                });
+            }
+
+            startTimer(minutes) {
+                this.initAudio();
+                this.selectedMinutes = minutes;
+                this.timeLeft = minutes * 60;
+                this.isRunning = true;
+                this.isPaused = false;
+                
+                const display = this.element.querySelector(`#display-${this.id}`);
+                const pauseBtn = this.element.querySelector(`#pauseBtn-${this.id}`);
+                const resetBtn = this.element.querySelector(`#resetBtn-${this.id}`);
+                
+                display.classList.add('running');
+                pauseBtn.disabled = false;
+                resetBtn.disabled = false;
+                pauseBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                `;
+                
+                this.updatePresetButtonText();
+                this.updateDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    if (!this.isPaused) {
+                        this.timeLeft--;
+                        this.updateDisplay();
+                        
+                        if (this.timeLeft <= 0) {
+                            clearInterval(this.timerInterval);
+                            this.timerComplete();
+                        }
+                    }
+                }, 1000);
+            }
+
+            addTime(minutes) {
+                if (this.isRunning) {
+                    this.timeLeft += minutes * 60;
+                    this.updateDisplay();
+                }
+            }
+
+            pauseTimer() {
+                const display = this.element.querySelector(`#display-${this.id}`);
+                const pauseBtn = this.element.querySelector(`#pauseBtn-${this.id}`);
+                
+                if (this.isPaused) {
+                    this.isPaused = false;
+                    pauseBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                    `;
+                    display.classList.add('running');
                 } else {
-                    button.textContent = `${minutes} mins`;
+                    this.isPaused = true;
+                    pauseBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    `;
+                    display.classList.remove('running');
+                }
+            }
+
+            resetTimer() {
+                clearInterval(this.timerInterval);
+                this.timeLeft = 0;
+                this.isRunning = false;
+                this.isPaused = false;
+                this.updateDisplay();
+                
+                const display = this.element.querySelector(`#display-${this.id}`);
+                const pauseBtn = this.element.querySelector(`#pauseBtn-${this.id}`);
+                const resetBtn = this.element.querySelector(`#resetBtn-${this.id}`);
+                
+                display.classList.remove('running');
+                pauseBtn.disabled = true;
+                resetBtn.disabled = true;
+                pauseBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                `;
+                
+                this.updatePresetButtonText();
+            }
+
+            timerComplete() {
+                this.isRunning = false;
+                const display = this.element.querySelector(`#display-${this.id}`);
+                const pauseBtn = this.element.querySelector(`#pauseBtn-${this.id}`);
+                const resetBtn = this.element.querySelector(`#resetBtn-${this.id}`);
+                
+                display.classList.remove('running');
+                this.updatePresetButtonText();
+                pauseBtn.disabled = true;
+                resetBtn.disabled = true;
+
+                // Show modal
+                const modal = document.getElementById('modal');
+                modal.style.display = 'flex';
+                modal.dataset.timerId = this.id;
+                this.startChiming();
+
+                if (window.electronAPI) {
+                    window.electronAPI.showNotification("Time's Up!", "Your Pomodoro session is complete!");
+                }
+            }
+
+            delete() {
+                if (timers.size <= 1) return; // Keep at least one timer
+                
+                clearInterval(this.timerInterval);
+                this.stopChiming();
+                this.element.remove();
+                timers.delete(this.id);
+                updateLayout();
+                updateDeleteButtons();
+            }
+        }
+
+        // Global variables
+        let timers = new Map();
+        let nextTimerId = 1;
+        const MAX_TIMERS = 6;
+
+        function createTimer() {
+            if (timers.size >= MAX_TIMERS) return;
+            
+            const timer = new PomodoroTimer(nextTimerId++);
+            timers.set(timer.id, timer);
+            
+            const grid = document.getElementById('timersGrid');
+            grid.appendChild(timer.createElement());
+            
+            updateLayout();
+            updateDeleteButtons();
+            updateAddButton();
+        }
+
+        function updateDeleteButtons() {
+            // Show/hide delete buttons based on timer count
+            document.querySelectorAll('.timer-container').forEach(container => {
+                const deleteBtn = container.querySelector('.delete-timer');
+                if (timers.size > 1) {
+                    if (!deleteBtn) {
+                        // Add delete button if it doesn't exist
+                        const timerId = parseInt(container.id.replace('timer-', ''));
+                        const timer = timers.get(timerId);
+                        if (timer) {
+                            const btn = document.createElement('button');
+                            btn.className = 'delete-timer';
+                            btn.setAttribute('data-timer-id', timerId);
+                            btn.setAttribute('title', 'Delete Timer');
+                            btn.innerHTML = `
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            `;
+                            btn.addEventListener('click', () => timer.delete());
+                            container.appendChild(btn);
+                        }
+                    }
+                } else {
+                    // Remove delete button if only one timer
+                    if (deleteBtn) {
+                        deleteBtn.remove();
+                    }
                 }
             });
         }
 
-        function startTimer(minutes) {
-            initAudio();
-            selectedMinutes = minutes;
-            timeLeft = minutes * 60;
-            isRunning = true;
-            isPaused = false;
-            
-            timerDisplay.classList.add('running');
-            pauseBtn.disabled = false;
-            resetBtn.disabled = false;
-            pauseBtn.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-            `;
-            
-            // Update preset button text to show "+"
-            updatePresetButtonText();
-            
-            updateDisplay();
-            
-            timerInterval = setInterval(() => {
-                if (!isPaused) {
-                    timeLeft--;
-                    updateDisplay();
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        timerComplete();
-                    }
-                }
-            }, 1000);
+        function updateLayout() {
+            const grid = document.getElementById('timersGrid');
+            grid.setAttribute('data-count', timers.size.toString());
         }
 
-        function addTime(minutes) {
-            if (isRunning) {
-                timeLeft += minutes * 60;
-                updateDisplay();
-            }
-        }
-
-        function pauseTimer() {
-            if (isPaused) {
-                isPaused = false;
-                pauseBtn.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-            `;
-                timerDisplay.classList.add('running');
+        function updateAddButton() {
+            const addBtn = document.getElementById('addTimerBtn');
+            if (timers.size >= MAX_TIMERS) {
+                addBtn.style.display = 'none';
             } else {
-                isPaused = true;
-                pauseBtn.innerHTML = `
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                `;
-                timerDisplay.classList.remove('running');
-            }
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timeLeft = 0;
-            isRunning = false;
-            isPaused = false;
-            updateDisplay();
-            
-            timerDisplay.classList.remove('running');
-            pauseBtn.disabled = true;
-            resetBtn.disabled = true;
-            pauseBtn.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-            `;
-            
-            // Update preset button text to remove "+"
-            updatePresetButtonText();
-        }
-
-        function timerComplete() {
-            isRunning = false;
-            timerDisplay.classList.remove('running');
-            modal.style.display = 'flex';
-            startChiming();
-            
-            // Update preset button text to remove "+"
-            updatePresetButtonText();
-            pauseBtn.disabled = true;
-            resetBtn.disabled = true;
-
-            if (window.electronAPI) {
-                window.electronAPI.showNotification("Time's Up!", "Your Pomodoro session is complete!");
+                addBtn.style.display = 'flex';
             }
         }
 
         // Event listeners
-        presetButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const minutes = parseInt(button.dataset.minutes);
-                if (isRunning) {
-                    addTime(minutes);
-                } else {
-                    startTimer(minutes);
-                }
-            });
-        });
+        document.getElementById('addTimerBtn').addEventListener('click', createTimer);
 
-        pauseBtn.addEventListener('click', pauseTimer);
-        resetBtn.addEventListener('click', resetTimer);
-
-        okBtn.addEventListener('click', () => {
-            stopChiming();
+        document.getElementById('okBtn').addEventListener('click', () => {
+            const modal = document.getElementById('modal');
+            const timerId = parseInt(modal.dataset.timerId);
+            const timer = timers.get(timerId);
+            
+            if (timer) {
+                timer.stopChiming();
+                timer.resetTimer();
+            }
+            
             modal.style.display = 'none';
-            resetTimer();
         });
 
-        // Initialize display
-        updateDisplay();
-
+        // Initialize with one timer
+        createTimer();
     </script>
 </body>
 </html>
