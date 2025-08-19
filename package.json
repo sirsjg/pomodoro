@@ -1,6 +1,6 @@
 {
   "name": "pomodoro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Pomodoro timer for everyone",
   "main": "main.js",
   "scripts": {
@@ -67,9 +67,18 @@
         "@semantic-release/github",
         {
           "assets": [
-            { "path": "dist/*.dmg", "label": "macOS Installer" },
-            { "path": "dist/*.exe", "label": "Windows Installer" },
-            { "path": "dist/*.zip", "label": "Portable Archive" }
+            {
+              "path": "dist/*.dmg",
+              "label": "macOS Installer"
+            },
+            {
+              "path": "dist/*.exe",
+              "label": "Windows Installer"
+            },
+            {
+              "path": "dist/*.zip",
+              "label": "Portable Archive"
+            }
           ]
         }
       ]
