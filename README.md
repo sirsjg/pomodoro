@@ -2,6 +2,12 @@
 
 A sleek, full-screen Pomodoro timer built with web technologies and packaged as a native desktop app using Electron. Works on macOS and Windows.
 
+### Single Timer View
+![Single Timer](docs/images/screenshot1.png)
+
+### Multi-Timer Grid
+![Multi-Timer Grid](docs/images/screenshot2.png)
+
 ## Features
 
 - **Dark Theme** - Easy on the eyes with a pure black background and elegant design
