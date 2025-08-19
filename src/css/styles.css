@@ -1,0 +1,284 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.timers-grid {
+    display: grid;
+    width: 100%;
+    height: 100%;
+}
+
+.timers-grid[data-count="1"] {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.timers-grid[data-count="2"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.timers-grid[data-count="3"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.timers-grid[data-count="3"] .timer-container:nth-child(3) {
+    grid-column: 1 / -1;
+}
+
+.timers-grid[data-count="4"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.timers-grid[data-count="5"] {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.timers-grid[data-count="5"] .timer-container:nth-child(4),
+.timers-grid[data-count="5"] .timer-container:nth-child(5) {
+    grid-column: span 1;
+}
+
+.timers-grid[data-count="6"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.timer-container {
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timer-container:last-child {
+    border-right: none;
+}
+
+.timers-grid[data-count="2"] .timer-container:nth-child(2),
+.timers-grid[data-count="3"] .timer-container:nth-child(2),
+.timers-grid[data-count="4"] .timer-container:nth-child(2n),
+.timers-grid[data-count="5"] .timer-container:nth-child(3),
+.timers-grid[data-count="6"] .timer-container:nth-child(2n) {
+    border-right: none;
+}
+
+.timers-grid[data-count="1"] .timer-container,
+.timers-grid[data-count="2"] .timer-container,
+.timers-grid[data-count="3"] .timer-container:last-child,
+.timers-grid[data-count="4"] .timer-container:nth-last-child(-n+2),
+.timers-grid[data-count="5"] .timer-container:nth-last-child(-n+3),
+.timers-grid[data-count="6"] .timer-container:nth-last-child(-n+2) {
+    border-bottom: none;
+}
+
+.delete-timer {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 67, 54, 0.2);
+    border: 1px solid rgba(255, 67, 54, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.delete-timer:hover {
+    opacity: 1;
+    background-color: rgba(255, 67, 54, 0.4);
+    transform: scale(1.1);
+}
+
+.delete-timer svg {
+    width: 16px;
+    height: 16px;
+    stroke: #ff4336;
+}
+
+.timer-display {
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 200;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.timers-grid[data-count="2"] .timer-display,
+.timers-grid[data-count="3"] .timer-display,
+.timers-grid[data-count="4"] .timer-display {
+    font-size: clamp(3rem, 8vw, 6rem);
+}
+
+.timers-grid[data-count="5"] .timer-display,
+.timers-grid[data-count="6"] .timer-display {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.controls {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.preset-btn, .control-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.preset-btn:hover, .control-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.icon-btn {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.add-timer-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(76, 175, 80, 0.2);
+    border: 2px solid rgba(76, 175, 80, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.add-timer-btn:hover {
+    background-color: rgba(76, 175, 80, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+}
+
+.add-timer-btn svg {
+    width: 30px;
+    height: 30px;
+    stroke: #4CAF50;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    padding: 3rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.ok-btn {
+    padding: 1rem 3rem;
+    font-size: 1.5rem;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.ok-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.running {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
