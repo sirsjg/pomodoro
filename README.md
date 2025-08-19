@@ -52,3 +52,28 @@ npm run dist:all
 ```
 
 Built apps will be in the `dist/` folder.
+
+## Releases
+
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) for automated releases. 
+
+### Commit Message Format
+
+To trigger releases, use conventional commit messages:
+
+- `feat: add new feature` - triggers a minor release
+- `fix: fix a bug` - triggers a patch release  
+- `feat!: breaking change` or `BREAKING CHANGE:` in commit body - triggers a major release
+
+### Release Process
+
+1. Push commits to the `main` branch
+2. GitHub Actions automatically builds for macOS and Windows
+3. If semantic-release detects releasable changes, it creates a new release with:
+   - Automated version bump
+   - Generated changelog
+   - macOS .dmg installer
+   - Windows .exe installer
+   - Portable .zip archives
+
+Releases are published to GitHub Releases with all platform binaries attached.
