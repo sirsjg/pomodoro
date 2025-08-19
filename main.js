@@ -4,12 +4,9 @@ const path = require('path');
 let mainWindow;
 
 function createWindow() {
-  let iconPath;
-  if (process.platform === 'darwin') {
-    iconPath = path.join(__dirname, 'icon.icns');
-  } else {
-    iconPath = path.join(__dirname, 'icon.png');
-  }
+  const iconPath = process.platform === 'darwin' 
+    ? path.join(__dirname, 'src/assets/icon.icns')
+    : path.join(__dirname, 'src/assets/icon.png');
 
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -27,31 +24,20 @@ function createWindow() {
   });
 
   mainWindow.loadFile('index.html');
-  
-  // Start in fullscreen if desired
-  // mainWindow.setFullScreen(true);
 
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-// Create app menu
 function createMenu() {
   const template = [
     {
       label: 'Pomodoro Timer',
       submenu: [
-        {
-          label: 'About Pomodoro Timer',
-          role: 'about'
-        },
+        { label: 'About Pomodoro Timer', role: 'about' },
         { type: 'separator' },
-        {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: () => app.quit()
-        }
+        { label: 'Quit', accelerator: 'Command+Q', click: () => app.quit() }
       ]
     },
     {
@@ -60,9 +46,7 @@ function createMenu() {
         {
           label: 'Toggle Fullscreen',
           accelerator: 'Ctrl+Command+F',
-          click: () => {
-            mainWindow.setFullScreen(!mainWindow.isFullScreen());
-          }
+          click: () => mainWindow.setFullScreen(!mainWindow.isFullScreen())
         },
         { role: 'reload' },
         { role: 'toggledevtools' }
@@ -70,23 +54,23 @@ function createMenu() {
     }
   ];
   
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 app.whenReady().then(() => {
   createWindow();
   createMenu();
   
-  app.on('activate', function () {
+  app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
 ipcMain.handle('show-notification', (event, title, body) => {
-  new Notification({ title, body, icon: path.join(__dirname, 'icon.png') }).show();
+  const iconPath = path.join(__dirname, 'src/assets/icon.png');
+  new Notification({ title, body, icon: iconPath }).show();
 });
